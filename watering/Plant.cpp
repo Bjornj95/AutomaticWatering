@@ -36,12 +36,12 @@ void Plant::check_and_water() {
   print_status();
 
   if(this -> moist_level > this -> water_at){
-    //Serial.println("Try to water");
+    Serial.println("Try to water");
     run_motor_for_seconds(4);
     
     
   }else{
-    //Serial.println(" Do nothing \n");
+    Serial.println(" Do nothing \n");
   }
     
   add_time();
@@ -51,12 +51,12 @@ void Plant::run_motor_for_seconds(int secs) {
   int total_watered = 0;
   for ( int i = 0; i < 23; i++ )
     total_watered += this -> amount_last_24h[i];
-    //Serial.println(total_watered);
+    Serial.println(total_watered);
   if(current_hour < 22 && current_hour > 8 && total_watered < 56){
     digitalWrite(this -> motor_pin, LOW);
     delay(secs*1000);
     digitalWrite(this -> motor_pin, HIGH);
-    //Serial.println("Watered");
+    Serial.println("Watered");
     this -> amount_last_24h[current_hour-1] = secs;
   }else{
     this -> amount_last_24h[current_hour-1] = 0;
@@ -74,28 +74,28 @@ void Plant::add_time(){
 }
 
 void Plant::print_status(){
-  //Serial.println();
-  //Serial.print("--------------------");
-  //Serial.println();
-  //Serial.print(this -> sensor_pin);
-  //Serial.println();
+  Serial.println();
+  Serial.print("--------------------");
+  Serial.println();
+  Serial.print(this -> sensor_pin);
+  Serial.println();
 
-  //Serial.print("Time: ");
-  //Serial.print(this -> current_hour);
-  //Serial.println();
+  Serial.print("Time: ");
+  Serial.print(this -> current_hour);
+  Serial.println();
   
-  //Serial.print("Moist level: ");
-  //Serial.print(this -> moist_level);
-  //Serial.println();
+  Serial.print("Moist level: ");
+  Serial.print(this -> moist_level);
+  Serial.println();
 
-  //Serial.print("Water at: ");
-  //Serial.print(this -> water_at);
-  //Serial.println();
+  Serial.print("Water at: ");
+  Serial.print(this -> water_at);
+  Serial.println();
 
-  //Serial.print("Watered last 24: ");
+  Serial.print("Watered last 24: ");
   for ( int i = 0; i < 23; i++ ){
-    //Serial.print(this -> amount_last_24h[i]);
-    //Serial.print(" ");
+    Serial.print(this -> amount_last_24h[i]);
+    Serial.print(" ");
   }
-  //Serial.println();
+  Serial.println();
 }
