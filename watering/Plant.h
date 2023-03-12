@@ -13,7 +13,6 @@ class Plant {
     int water_at;
     int moist_level;
     int amount_last_24h[24];
-    void blink_light(int number_of_blinks);
     void print_status();
   public:
     Plant(const uint8_t& sensor_pin, int motor_pin, int plant_type, int start_time);

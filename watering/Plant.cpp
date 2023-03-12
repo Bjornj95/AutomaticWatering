@@ -27,7 +27,6 @@ Plant::Plant(const uint8_t& sensor_pin, int motor_pin, int plant_type, int start
   pinMode(motor_pin, OUTPUT);
   digitalWrite(motor_pin, HIGH);
   pinMode(sensor_pin, INPUT);
-  //blink_light(1);
 }
     
 void Plant::check_and_water() {
@@ -53,11 +52,8 @@ void Plant::run_motor_for_seconds(int secs) {
     total_watered += this -> amount_last_24h[i];
     Serial.println(total_watered);
   if(total_watered < 56){
-    Serial.println("Watered");
     digitalWrite(this -> motor_pin, LOW);
-    Serial.println("Watered");
     delay(secs*1000);
-    Serial.println("Watered");
     digitalWrite(this -> motor_pin, HIGH);
     Serial.println("Watered");
     this -> amount_last_24h[current_hour-1] = secs;
@@ -68,26 +64,12 @@ void Plant::run_motor_for_seconds(int secs) {
 }
 
 void Plant::add_time(){
-  //blink_light(5);
   if(this -> current_hour == 24){
     this -> current_hour = 1;
   }
   else{
     this -> current_hour++;
   }
-}
-
-void Plant::blink_light(int number_of_blinks){
-  //int pin_state = digitalRead(13);
-  digitalWrite(13, LOW);
-  delay(1000);
-  for(int i = 0; i < number_of_blinks; i++){
-    digitalWrite(13, HIGH);
-    delay(1000);
-    digitalWrite(13, LOW);
-    delay(1000);
-  }
-  //digitalWrite(13, pin_state);
 }
 
 void Plant::print_status(){
