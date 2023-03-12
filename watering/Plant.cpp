@@ -9,13 +9,12 @@ int MIN = 215; // Very moist
 
 int TOMATO_WATERING_LEVEL = 350; //370
 int CHILLI_WATERING_LEVEL = 480;
-int time_when_starting = 22;
 
-Plant::Plant(const uint8_t& sensor_pin, int motor_pin, int plant_type) {
+Plant::Plant(const uint8_t& sensor_pin, int motor_pin, int plant_type, int start_time) {
   this -> sensor_pin = sensor_pin;
   this -> motor_pin = motor_pin;
   this -> plant_type = plant_type;
-  this -> current_hour = time_when_starting;
+  this -> current_hour = start_time;
   this -> moist_level = 0;
   for ( int i = 0; i < 23; i++ ){
     this -> amount_last_24h[i] = 0;
@@ -28,6 +27,7 @@ Plant::Plant(const uint8_t& sensor_pin, int motor_pin, int plant_type) {
   pinMode(motor_pin, OUTPUT);
   digitalWrite(motor_pin, HIGH);
   pinMode(sensor_pin, INPUT);
+  //blink_light(1);
 }
     
 void Plant::check_and_water() {
@@ -52,9 +52,12 @@ void Plant::run_motor_for_seconds(int secs) {
   for ( int i = 0; i < 23; i++ )
     total_watered += this -> amount_last_24h[i];
     Serial.println(total_watered);
-  if(current_hour < 22 && current_hour > 8 && total_watered < 56){
+  if(total_watered < 56){
+    Serial.println("Watered");
     digitalWrite(this -> motor_pin, LOW);
+    Serial.println("Watered");
     delay(secs*1000);
+    Serial.println("Watered");
     digitalWrite(this -> motor_pin, HIGH);
     Serial.println("Watered");
     this -> amount_last_24h[current_hour-1] = secs;
@@ -65,12 +68,26 @@ void Plant::run_motor_for_seconds(int secs) {
 }
 
 void Plant::add_time(){
+  //blink_light(5);
   if(this -> current_hour == 24){
     this -> current_hour = 1;
   }
   else{
     this -> current_hour++;
   }
+}
+
+void Plant::blink_light(int number_of_blinks){
+  //int pin_state = digitalRead(13);
+  digitalWrite(13, LOW);
+  delay(1000);
+  for(int i = 0; i < number_of_blinks; i++){
+    digitalWrite(13, HIGH);
+    delay(1000);
+    digitalWrite(13, LOW);
+    delay(1000);
+  }
+  //digitalWrite(13, pin_state);
 }
 
 void Plant::print_status(){
